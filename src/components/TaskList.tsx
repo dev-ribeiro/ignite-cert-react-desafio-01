@@ -15,22 +15,39 @@ export function TaskList() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   function handleCreateNewTask() {
-    const register: Task = {
-      id: tasks.length + 1,
-      title: newTaskTitle,
-      isComplete: false
+    if (newTaskTitle !== '') {
+      const register: Task = {
+        id: tasks.length + 1,
+        title: newTaskTitle,
+        isComplete: false
+      }
+
+      setTasks([...tasks, register])
+
     }
 
-    setTasks([...tasks, register])
   }
 
   function handleToggleTaskCompletion(id: number) {
-    // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    const updateToggleTask = tasks.map(todo => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          isComplete: todo.isComplete === false ? true : false
+        }
+      }
+
+      return todo
+    })
+
+    setTasks(updateToggleTask)
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
   }
+
+  console.log(tasks)
 
   return (
     <section className="task-list container">
@@ -45,7 +62,7 @@ export function TaskList() {
             value={newTaskTitle}
           />
           <button type="submit" data-testid="add-task-button" onClick={handleCreateNewTask}>
-            <FiCheckSquare size={16} color="#fff"/>
+            <FiCheckSquare size={16} color="#fff" />
           </button>
         </div>
       </header>
@@ -68,7 +85,7 @@ export function TaskList() {
               </div>
 
               <button type="button" data-testid="remove-task-button" onClick={() => handleRemoveTask(task.id)}>
-                <FiTrash size={16}/>
+                <FiTrash size={16} />
               </button>
             </li>
           ))}
